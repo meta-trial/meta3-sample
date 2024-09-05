@@ -63,10 +63,20 @@ With the ``conda`` environment activated, install the ``meta-edc`` python packag
 
 .. code-block:: bash
 
-  pip install meta-edc==0.2.33
+  pip install -U .
+  pip install -U --force-reinstall --no-cache-dir mysqlclient
 
 
-Now that the application is installed, we need to make some changes to the configuration. 
+Move settings file into demo folder. Assuming you install miniconda in your
+home folder:
+
+.. code-block:: bash
+
+  cd ~/clinicedc/meta3-demo && \
+  cp -R ~/miniconda3/envs/meta/lib/python3.12/site-packages/meta_edc/settings .
+
+
+Now that the application is installed, we need to make some changes to the configuration.
 
 Copy the sample environment file to a working copy
 
@@ -84,11 +94,11 @@ Next, edit your working copy of the environment file (.env). Look for ``DATABASE
 
   # find this line
   DATABASE_URL=mysql://<username>:<password>@127.0.0.1:3306/meta3_demo
-  
+
   # and change with your details, for example
   DATABASE_URL=mysql://root:dumela@127.0.0.1:3306/meta3_demo
 
-Next we need to create the keys used for data encryption. 
+Next we need to create the keys used for data encryption.
 
 Run ``manage.py`` check_ for the first time. This will ask django-crypto-fields_ to create encryption keys.
 
@@ -98,10 +108,10 @@ Run ``manage.py`` check_ for the first time. This will ask django-crypto-fields_
 
 Note
     The system encrypts sensitive data (personally identifiable information or PII) using django-crypto-fields_. The first time you run
-    ``manage.py``, django-crypto-fields_ looks for the keys. If they do not exist, it creates them. 
+    ``manage.py``, django-crypto-fields_ looks for the keys. If they do not exist, it creates them.
 
 
-Now go back and edit the working copy of your environment file ``.env``. 
+Now go back and edit the working copy of your environment file ``.env``.
 
 
 Change ``DJANGO_AUTO_CREATE_KEYS`` to False
@@ -110,14 +120,14 @@ Change ``DJANGO_AUTO_CREATE_KEYS`` to False
 
     DJANGO_AUTO_CREATE_KEYS=False
 
-Run manage.py check_ again. 
+Run manage.py check_ again.
 
 .. code-block:: bash
 
   python manage.py check
 
 
-You should see a final message ``System check identified 3 issues (1 silenced)``. Since this is a test server, you may ignore these warnings.  
+You should see a final message ``System check identified 3 issues (1 silenced)``. Since this is a test server, you may ignore these warnings.
 
 
 Now you are ready to prepare the database that you created earlier.
@@ -136,7 +146,7 @@ Restore the demo data
 Note
     There are a few caveats to migrating your own database instead of using the demo data. Running ``migrate`` on an empty database takes more than 30 min. Also, you will run into a few simple problems with the `data` migrations. See the note on`running migrations on an empty database` in `Troubleshooting`_ below.
 
-Now that our database has the required data schema, we need to run the post-migrate signals_ to populate some static data. But this does not take long. 
+Now that our database has the required data schema, we need to run the post-migrate signals_ to populate some static data. But this does not take long.
 
 To do this, run the ``migrate`` command.
 
@@ -197,7 +207,7 @@ Follow these steps to configure a working account with rights to create new user
     * Staff
     * Clinician Super
 
-* Click SAVE at the bottom of the form 
+* Click SAVE at the bottom of the form
 
 Now you are ready to screen your first participant!
 
